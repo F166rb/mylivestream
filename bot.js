@@ -71,7 +71,7 @@ client.on('message', async msg => { // eslint-disable-line
 	let command = msg.content.toLowerCase().split(" ")[0];
 	command = command.slice(PREFIX.length)
 
-	if (command === `play`) {
+	if (command === `b-play`) {
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send('أنا آسف ولكن عليك أن تكون في قناة صوتية لتشغيل الموسيقى!');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -126,25 +126,25 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 			}
 			return handleVideo(video, msg, voiceChannel);
 		}
-	} else if (command === `s`) {
+	} else if (command === `b-s`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
-	} else if (command === `stop`) {
+	} else if (command === `b-stop`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
-	} else if (command === `vol`) {
+	} else if (command === `b-vol`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing.');
 		if (!args[1]) return msg.channel.send(`:loud_sound: Current volume is **${serverQueue.volume}**`);
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`);
-	} else if (command === `np`) {
+	} else if (command === `b-np`) {
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: الان يتم تشغيل: **${serverQueue.songs[0].title}**`)
@@ -158,14 +158,14 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
 **الان يتم تشغيل** ${serverQueue.songs[0].title}`)
 		return msg.channel.sendEmbed(embedqu);
-	} else if (command === `pause`) {
+	} else if (command === `b-pause`) {
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
 			return msg.channel.send('تم إيقاف الموسيقى مؤقتا!');
 		}
 		return msg.channel.send('There is nothing playing.');
-	} else if (command === "resume") {
+	} else if (command === "b-resume") {
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
